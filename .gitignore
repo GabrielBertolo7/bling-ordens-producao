@@ -1,0 +1,13 @@
+bin/
+obj/
+*.user
+.vs/
+diag-output.txt
+publish/
+*.zip
+CLAUDE.md
+.claude/
+
+# Segredos nunca ficam no repositório: client_id/client_secret e tokens do Bling
+# são inseridos pelo usuário em runtime e persistidos criptografados (DPAPI) em
+# %AppData%\BlingOrdensProducao\auth.dat — fora da pasta do projeto.
