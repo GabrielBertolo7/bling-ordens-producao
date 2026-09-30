@@ -23,6 +23,8 @@ resultado de cada item na tela.
 - Tokens guardados criptografados (DPAPI), presos ao usuário do Windows.
 - Entrega como `.exe` autocontido: quem usa não precisa instalar o .NET.
 
+![Tela principal com um lote de exemplo (dados fictícios)](docs/img/tela-principal.png)
+
 ## Como rodar
 
 ```
