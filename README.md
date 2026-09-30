@@ -9,6 +9,20 @@ A tela principal tem busca de produto com autocomplete (usando o catálogo carre
 Bling), uma lista onde os itens do lote vão se acumulando, e um botão que cria e finaliza a ordem de
 cada item de uma vez, com log de sucesso ou erro por item.
 
+## Em resumo
+
+**Problema:** numa produção com várias impressoras 3D rodando ao longo do dia, cada lote virava uma ordem de
+produção criada e finalizada à mão no Bling, produto por produto.
+
+**Solução:** um aplicativo de Windows em que você busca o produto, monta o lote e executa tudo de uma vez, com o
+resultado de cada item na tela.
+
+**Destaques**
+
+- Integração com a API v3 do Bling usando OAuth2, com renovação automática do token.
+- Tokens guardados criptografados (DPAPI), presos ao usuário do Windows.
+- Entrega como `.exe` autocontido: quem usa não precisa instalar o .NET.
+
 ## Como rodar
 
 ```
