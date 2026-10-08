@@ -31,6 +31,12 @@ resultado de cada item na tela.
 dotnet run --project src/BlingOrdensProducao
 ```
 
+A interface abre em português. Opções de linha de comando:
+
+- `--lang en`: interface em inglês.
+- `--demo`: tela com dados fictícios, sem chamar a API do Bling (usada para prints).
+- `--screenshot arquivo.png`: salva um print da janela e fecha.
+
 ## Cadastro do aplicativo no painel do Bling
 
 A API v3 do Bling usa OAuth2, então antes de autorizar é preciso cadastrar um app em

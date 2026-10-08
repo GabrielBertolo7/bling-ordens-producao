@@ -16,18 +16,23 @@ partial class MainForm
     #region Windows Form Designer generated code
 
     private Label lblTitle;
-    private Label lblStatusConexao;
+    private Label lblSubtitle;
+    private StatusPill pillStatus;
     private Button btnTestConnection;
     private Button btnSignOut;
 
-    private Panel pnlSetup;
+    private CardPanel pnlSetup;
+    private Label lblSetupTitle;
+    private Label lblSetupHint;
     private Label lblClientId;
     private TextBox txtClientId;
     private Label lblClientSecret;
     private TextBox txtClientSecret;
     private Button btnAuthorize;
 
-    private Panel pnlLote;
+    private CardPanel pnlLote;
+    private Label lblLoteTitle;
+    private Label lblBatchSummary;
     private Label lblBusca;
     private Button btnAtualizarCatalogo;
     private TextBox txtBusca;
@@ -35,30 +40,38 @@ partial class MainForm
     private Label lblQuantidade;
     private NumericUpDown numQuantidade;
     private Button btnAdicionarItem;
-    private ListView lvItens;
-    private ColumnHeader colProduto;
-    private ColumnHeader colQuantidade;
+    private DataGridView dgvItens;
+    private DataGridViewTextBoxColumn colProduto;
+    private DataGridViewTextBoxColumn colQuantidade;
     private Button btnRemoverItem;
     private Button btnExecutar;
 
+    private CardPanel pnlLog;
+    private Label lblLogTitle;
+    private Panel pnlLogBox;
     private TextBox txtLog;
 
     private void InitializeComponent()
     {
         this.components = new System.ComponentModel.Container();
         this.lblTitle = new Label();
-        this.lblStatusConexao = new Label();
+        this.lblSubtitle = new Label();
+        this.pillStatus = new StatusPill();
         this.btnTestConnection = new Button();
         this.btnSignOut = new Button();
 
-        this.pnlSetup = new Panel();
+        this.pnlSetup = new CardPanel();
+        this.lblSetupTitle = new Label();
+        this.lblSetupHint = new Label();
         this.lblClientId = new Label();
         this.txtClientId = new TextBox();
         this.lblClientSecret = new Label();
         this.txtClientSecret = new TextBox();
         this.btnAuthorize = new Button();
 
-        this.pnlLote = new Panel();
+        this.pnlLote = new CardPanel();
+        this.lblLoteTitle = new Label();
+        this.lblBatchSummary = new Label();
         this.lblBusca = new Label();
         this.btnAtualizarCatalogo = new Button();
         this.txtBusca = new TextBox();
@@ -66,208 +79,270 @@ partial class MainForm
         this.lblQuantidade = new Label();
         this.numQuantidade = new NumericUpDown();
         this.btnAdicionarItem = new Button();
-        this.lvItens = new ListView();
-        this.colProduto = new ColumnHeader();
-        this.colQuantidade = new ColumnHeader();
+        this.dgvItens = new DataGridView();
+        this.colProduto = new DataGridViewTextBoxColumn();
+        this.colQuantidade = new DataGridViewTextBoxColumn();
         this.btnRemoverItem = new Button();
         this.btnExecutar = new Button();
 
+        this.pnlLog = new CardPanel();
+        this.lblLogTitle = new Label();
+        this.pnlLogBox = new Panel();
         this.txtLog = new TextBox();
 
         ((System.ComponentModel.ISupportInitialize)(this.numQuantidade)).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)(this.dgvItens)).BeginInit();
         this.pnlSetup.SuspendLayout();
         this.pnlLote.SuspendLayout();
+        this.pnlLog.SuspendLayout();
+        this.pnlLogBox.SuspendLayout();
         this.SuspendLayout();
 
-        // lblTitle
+        // ---------- Cabeçalho ----------
+
         this.lblTitle.AutoSize = true;
-        this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-        this.lblTitle.Location = new System.Drawing.Point(20, 15);
-        this.lblTitle.Text = "Ordens de Produção - Bling";
+        this.lblTitle.Font = Theme.Title;
+        this.lblTitle.ForeColor = Theme.Text;
+        this.lblTitle.Location = new System.Drawing.Point(18, 16);
 
-        // lblStatusConexao
-        this.lblStatusConexao.AutoSize = true;
-        this.lblStatusConexao.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.lblStatusConexao.Location = new System.Drawing.Point(490, 18);
-        this.lblStatusConexao.Text = "Conectado ao Bling";
-        this.lblStatusConexao.ForeColor = System.Drawing.Color.DarkGreen;
+        this.lblSubtitle.AutoSize = true;
+        this.lblSubtitle.Font = Theme.Subtitle;
+        this.lblSubtitle.ForeColor = Theme.Muted;
+        this.lblSubtitle.Location = new System.Drawing.Point(21, 52);
 
-        // btnTestConnection
+        this.pillStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        this.pillStatus.Location = new System.Drawing.Point(590, 18);
+
         this.btnTestConnection.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.btnTestConnection.Location = new System.Drawing.Point(490, 38);
-        this.btnTestConnection.Size = new System.Drawing.Size(100, 26);
-        this.btnTestConnection.Text = "Testar conexão";
-        this.btnTestConnection.Font = new System.Drawing.Font("Segoe UI", 7.5F);
+        this.btnTestConnection.Size = new System.Drawing.Size(132, 32);
+        this.btnTestConnection.Location = new System.Drawing.Point(488, 52);
+        Theme.SecondaryButton(this.btnTestConnection);
         this.btnTestConnection.Click += new EventHandler(this.btnTestConnection_Click);
 
-        // btnSignOut
         this.btnSignOut.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.btnSignOut.Location = new System.Drawing.Point(600, 38);
-        this.btnSignOut.Size = new System.Drawing.Size(100, 26);
-        this.btnSignOut.Text = "Desconectar";
-        this.btnSignOut.Font = new System.Drawing.Font("Segoe UI", 7.5F);
+        this.btnSignOut.Size = new System.Drawing.Size(112, 32);
+        this.btnSignOut.Location = new System.Drawing.Point(628, 52);
+        Theme.SecondaryButton(this.btnSignOut);
         this.btnSignOut.Click += new EventHandler(this.btnSignOut_Click);
 
-        // pnlSetup
-        this.pnlSetup.Location = new System.Drawing.Point(20, 60);
-        this.pnlSetup.Size = new System.Drawing.Size(660, 160);
+        // ---------- Cartão de autorização (antes de conectar) ----------
+
+        this.pnlSetup.Location = new System.Drawing.Point(20, 100);
+        this.pnlSetup.Size = new System.Drawing.Size(720, 252);
         this.pnlSetup.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        this.pnlSetup.Controls.Add(this.lblSetupTitle);
+        this.pnlSetup.Controls.Add(this.lblSetupHint);
         this.pnlSetup.Controls.Add(this.lblClientId);
         this.pnlSetup.Controls.Add(this.txtClientId);
         this.pnlSetup.Controls.Add(this.lblClientSecret);
         this.pnlSetup.Controls.Add(this.txtClientSecret);
         this.pnlSetup.Controls.Add(this.btnAuthorize);
 
-        // lblClientId
+        this.lblSetupTitle.AutoSize = true;
+        this.lblSetupTitle.Font = Theme.CardTitle;
+        this.lblSetupTitle.ForeColor = Theme.Text;
+        this.lblSetupTitle.Location = new System.Drawing.Point(18, 14);
+
+        this.lblSetupHint.AutoSize = true;
+        this.lblSetupHint.ForeColor = Theme.Muted;
+        this.lblSetupHint.Location = new System.Drawing.Point(18, 40);
+
         this.lblClientId.AutoSize = true;
-        this.lblClientId.Location = new System.Drawing.Point(0, 0);
-        this.lblClientId.Text = "Client ID";
+        this.lblClientId.Font = Theme.Label;
+        this.lblClientId.ForeColor = Theme.Muted;
+        this.lblClientId.Location = new System.Drawing.Point(18, 72);
 
-        // txtClientId
-        this.txtClientId.Location = new System.Drawing.Point(0, 20);
-        this.txtClientId.Size = new System.Drawing.Size(400, 23);
-        this.txtClientId.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        this.txtClientId.Font = Theme.Input;
+        this.txtClientId.BorderStyle = BorderStyle.FixedSingle;
+        this.txtClientId.Location = new System.Drawing.Point(18, 92);
+        this.txtClientId.Size = new System.Drawing.Size(420, 26);
 
-        // lblClientSecret
         this.lblClientSecret.AutoSize = true;
-        this.lblClientSecret.Location = new System.Drawing.Point(0, 55);
-        this.lblClientSecret.Text = "Client Secret";
+        this.lblClientSecret.Font = Theme.Label;
+        this.lblClientSecret.ForeColor = Theme.Muted;
+        this.lblClientSecret.Location = new System.Drawing.Point(18, 130);
 
-        // txtClientSecret
-        this.txtClientSecret.Location = new System.Drawing.Point(0, 75);
-        this.txtClientSecret.Size = new System.Drawing.Size(400, 23);
+        this.txtClientSecret.Font = Theme.Input;
+        this.txtClientSecret.BorderStyle = BorderStyle.FixedSingle;
+        this.txtClientSecret.Location = new System.Drawing.Point(18, 150);
+        this.txtClientSecret.Size = new System.Drawing.Size(420, 26);
         this.txtClientSecret.UseSystemPasswordChar = true;
-        this.txtClientSecret.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
-        // btnAuthorize
-        this.btnAuthorize.Location = new System.Drawing.Point(0, 115);
-        this.btnAuthorize.Size = new System.Drawing.Size(220, 32);
-        this.btnAuthorize.Text = "Autorizar acesso ao Bling";
+        this.btnAuthorize.Location = new System.Drawing.Point(18, 198);
+        this.btnAuthorize.Size = new System.Drawing.Size(240, 38);
+        Theme.PrimaryButton(this.btnAuthorize);
         this.btnAuthorize.Click += new EventHandler(this.btnAuthorize_Click);
 
-        // pnlLote
-        this.pnlLote.Location = new System.Drawing.Point(20, 60);
-        this.pnlLote.Size = new System.Drawing.Size(660, 330);
+        // ---------- Cartão do lote ----------
+
+        this.pnlLote.Location = new System.Drawing.Point(20, 100);
+        this.pnlLote.Size = new System.Drawing.Size(720, 366);
         this.pnlLote.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        this.pnlLote.Controls.Add(this.lstSugestoes);
+        this.pnlLote.Controls.Add(this.lblLoteTitle);
+        this.pnlLote.Controls.Add(this.lblBatchSummary);
         this.pnlLote.Controls.Add(this.lblBusca);
         this.pnlLote.Controls.Add(this.btnAtualizarCatalogo);
         this.pnlLote.Controls.Add(this.txtBusca);
-        this.pnlLote.Controls.Add(this.lstSugestoes);
         this.pnlLote.Controls.Add(this.lblQuantidade);
         this.pnlLote.Controls.Add(this.numQuantidade);
         this.pnlLote.Controls.Add(this.btnAdicionarItem);
-        this.pnlLote.Controls.Add(this.lvItens);
+        this.pnlLote.Controls.Add(this.dgvItens);
         this.pnlLote.Controls.Add(this.btnRemoverItem);
         this.pnlLote.Controls.Add(this.btnExecutar);
 
-        // lblBusca
-        this.lblBusca.AutoSize = true;
-        this.lblBusca.Location = new System.Drawing.Point(0, 0);
-        this.lblBusca.Text = "Produto (digite pra buscar)";
+        this.lblLoteTitle.AutoSize = true;
+        this.lblLoteTitle.Font = Theme.CardTitle;
+        this.lblLoteTitle.ForeColor = Theme.Text;
+        this.lblLoteTitle.Location = new System.Drawing.Point(18, 14);
 
-        // btnAtualizarCatalogo
-        this.btnAtualizarCatalogo.Location = new System.Drawing.Point(300, -2);
-        this.btnAtualizarCatalogo.Size = new System.Drawing.Size(100, 20);
-        this.btnAtualizarCatalogo.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-        this.btnAtualizarCatalogo.Text = "Atualizar catálogo";
+        this.lblBatchSummary.AutoSize = false;
+        this.lblBatchSummary.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        this.lblBatchSummary.ForeColor = Theme.Muted;
+        this.lblBatchSummary.TextAlign = ContentAlignment.MiddleRight;
+        this.lblBatchSummary.Location = new System.Drawing.Point(452, 14);
+        this.lblBatchSummary.Size = new System.Drawing.Size(250, 24);
+
+        this.lblBusca.AutoSize = true;
+        this.lblBusca.Font = Theme.Label;
+        this.lblBusca.ForeColor = Theme.Muted;
+        this.lblBusca.Location = new System.Drawing.Point(18, 50);
+
+        this.btnAtualizarCatalogo.FlatStyle = FlatStyle.Flat;
+        this.btnAtualizarCatalogo.FlatAppearance.BorderSize = 0;
+        this.btnAtualizarCatalogo.FlatAppearance.MouseOverBackColor = Theme.PrimarySoft;
+        this.btnAtualizarCatalogo.BackColor = Theme.Surface;
+        this.btnAtualizarCatalogo.ForeColor = Theme.Primary;
+        this.btnAtualizarCatalogo.Font = Theme.Label;
+        this.btnAtualizarCatalogo.Cursor = Cursors.Hand;
+        this.btnAtualizarCatalogo.TextAlign = ContentAlignment.MiddleRight;
+        this.btnAtualizarCatalogo.Location = new System.Drawing.Point(300, 45);
+        this.btnAtualizarCatalogo.Size = new System.Drawing.Size(150, 24);
         this.btnAtualizarCatalogo.Click += new EventHandler(this.btnAtualizarCatalogo_Click);
 
-        // txtBusca
-        this.txtBusca.Location = new System.Drawing.Point(0, 20);
-        this.txtBusca.Size = new System.Drawing.Size(400, 23);
+        this.txtBusca.Font = Theme.Input;
+        this.txtBusca.BorderStyle = BorderStyle.FixedSingle;
+        this.txtBusca.Location = new System.Drawing.Point(18, 72);
+        this.txtBusca.Size = new System.Drawing.Size(432, 26);
         this.txtBusca.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         this.txtBusca.AutoCompleteMode = AutoCompleteMode.None;
         this.txtBusca.TextChanged += new EventHandler(this.txtBusca_TextChanged);
 
-        // lstSugestoes
-        this.lstSugestoes.Location = new System.Drawing.Point(0, 45);
-        this.lstSugestoes.Size = new System.Drawing.Size(400, 90);
+        this.lstSugestoes.Font = Theme.Base;
+        this.lstSugestoes.BorderStyle = BorderStyle.FixedSingle;
+        this.lstSugestoes.Location = new System.Drawing.Point(18, 100);
+        this.lstSugestoes.Size = new System.Drawing.Size(432, 120);
         this.lstSugestoes.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         this.lstSugestoes.Visible = false;
         this.lstSugestoes.DisplayMember = "ExibicaoAutocomplete";
         this.lstSugestoes.Click += new EventHandler(this.lstSugestoes_Click);
 
-        // lblQuantidade
         this.lblQuantidade.AutoSize = true;
-        this.lblQuantidade.Location = new System.Drawing.Point(420, 0);
+        this.lblQuantidade.Font = Theme.Label;
+        this.lblQuantidade.ForeColor = Theme.Muted;
         this.lblQuantidade.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.lblQuantidade.Text = "Quantidade";
+        this.lblQuantidade.Location = new System.Drawing.Point(466, 50);
 
-        // numQuantidade
-        this.numQuantidade.Location = new System.Drawing.Point(420, 20);
-        this.numQuantidade.Size = new System.Drawing.Size(80, 23);
+        this.numQuantidade.Font = Theme.Input;
+        this.numQuantidade.BorderStyle = BorderStyle.FixedSingle;
+        this.numQuantidade.Location = new System.Drawing.Point(466, 72);
+        this.numQuantidade.Size = new System.Drawing.Size(90, 26);
         this.numQuantidade.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         this.numQuantidade.Minimum = 1;
         this.numQuantidade.Maximum = 100000;
         this.numQuantidade.Value = 1;
 
-        // btnAdicionarItem
-        this.btnAdicionarItem.Location = new System.Drawing.Point(510, 19);
-        this.btnAdicionarItem.Size = new System.Drawing.Size(150, 26);
+        this.btnAdicionarItem.Location = new System.Drawing.Point(566, 70);
+        this.btnAdicionarItem.Size = new System.Drawing.Size(136, 32);
         this.btnAdicionarItem.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.btnAdicionarItem.Text = "Adicionar à lista";
+        Theme.SecondaryButton(this.btnAdicionarItem);
+        this.btnAdicionarItem.ForeColor = Theme.Primary;
+        this.btnAdicionarItem.FlatAppearance.BorderColor = Theme.Primary;
+        this.btnAdicionarItem.FlatAppearance.MouseOverBackColor = Theme.PrimarySoft;
         this.btnAdicionarItem.Click += new EventHandler(this.btnAdicionarItem_Click);
 
-        // lvItens
-        this.lvItens.Location = new System.Drawing.Point(0, 140);
-        this.lvItens.Size = new System.Drawing.Size(660, 150);
-        this.lvItens.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        this.lvItens.View = View.Details;
-        this.lvItens.FullRowSelect = true;
-        this.lvItens.GridLines = true;
-        this.lvItens.MultiSelect = false;
-        this.lvItens.Columns.Add(this.colProduto);
-        this.lvItens.Columns.Add(this.colQuantidade);
+        this.dgvItens.Location = new System.Drawing.Point(18, 116);
+        this.dgvItens.Size = new System.Drawing.Size(684, 182);
+        this.dgvItens.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        Theme.Grid(this.dgvItens);
+        this.dgvItens.Columns.AddRange(new DataGridViewColumn[] { this.colProduto, this.colQuantidade });
 
-        // colProduto
-        this.colProduto.Text = "Produto";
-        this.colProduto.Width = 500;
+        this.colProduto.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        this.colProduto.SortMode = DataGridViewColumnSortMode.NotSortable;
 
-        // colQuantidade
-        this.colQuantidade.Text = "Quantidade";
-        this.colQuantidade.Width = 120;
+        this.colQuantidade.Width = 140;
+        this.colQuantidade.SortMode = DataGridViewColumnSortMode.NotSortable;
+        this.colQuantidade.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+        this.colQuantidade.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-        // btnRemoverItem
-        this.btnRemoverItem.Location = new System.Drawing.Point(0, 296);
-        this.btnRemoverItem.Size = new System.Drawing.Size(160, 28);
-        this.btnRemoverItem.Text = "Remover selecionado";
+        this.btnRemoverItem.Location = new System.Drawing.Point(18, 314);
+        this.btnRemoverItem.Size = new System.Drawing.Size(176, 36);
+        Theme.SecondaryButton(this.btnRemoverItem);
         this.btnRemoverItem.Click += new EventHandler(this.btnRemoverItem_Click);
 
-        // btnExecutar
-        this.btnExecutar.Location = new System.Drawing.Point(490, 294);
-        this.btnExecutar.Size = new System.Drawing.Size(170, 32);
+        this.btnExecutar.Location = new System.Drawing.Point(530, 312);
+        this.btnExecutar.Size = new System.Drawing.Size(172, 40);
         this.btnExecutar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        this.btnExecutar.Text = "Executar lote";
-        this.btnExecutar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+        Theme.PrimaryButton(this.btnExecutar);
         this.btnExecutar.Click += new EventHandler(this.btnExecutar_Click);
 
-        // txtLog
-        this.txtLog.Location = new System.Drawing.Point(20, 400);
-        this.txtLog.Size = new System.Drawing.Size(660, 180);
-        this.txtLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        // ---------- Cartão do registro ----------
+
+        this.pnlLog.Location = new System.Drawing.Point(20, 480);
+        this.pnlLog.Size = new System.Drawing.Size(720, 200);
+        this.pnlLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        this.pnlLog.Controls.Add(this.lblLogTitle);
+        this.pnlLog.Controls.Add(this.pnlLogBox);
+
+        this.lblLogTitle.AutoSize = true;
+        this.lblLogTitle.Font = Theme.CardTitle;
+        this.lblLogTitle.ForeColor = Theme.Text;
+        this.lblLogTitle.Location = new System.Drawing.Point(18, 14);
+
+        this.pnlLogBox.BackColor = Theme.LogBackground;
+        this.pnlLogBox.Padding = new Padding(12, 10, 12, 10);
+        this.pnlLogBox.Location = new System.Drawing.Point(18, 46);
+        this.pnlLogBox.Size = new System.Drawing.Size(684, 138);
+        this.pnlLogBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        this.pnlLogBox.Controls.Add(this.txtLog);
+
+        this.txtLog.Dock = DockStyle.Fill;
+        this.txtLog.BorderStyle = BorderStyle.None;
+        this.txtLog.BackColor = Theme.LogBackground;
+        this.txtLog.ForeColor = ColorTranslator.FromHtml("#1F2937");
         this.txtLog.Multiline = true;
         this.txtLog.ReadOnly = true;
         this.txtLog.ScrollBars = ScrollBars.Vertical;
-        this.txtLog.Font = new System.Drawing.Font("Consolas", 9F);
+        this.txtLog.Font = Theme.Log;
 
-        // MainForm
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(700, 610);
-        this.MinimumSize = new System.Drawing.Size(650, 500);
-        this.Text = "Bling - Ordens de Produção";
+        // ---------- Janela ----------
+
+        this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+        this.BackColor = Theme.Background;
+        this.Font = Theme.Base;
+        this.ClientSize = new System.Drawing.Size(760, 740);
+        this.MinimumSize = new System.Drawing.Size(700, 660);
+        this.StartPosition = FormStartPosition.CenterScreen;
         this.Controls.Add(this.lblTitle);
-        this.Controls.Add(this.lblStatusConexao);
+        this.Controls.Add(this.lblSubtitle);
+        this.Controls.Add(this.pillStatus);
         this.Controls.Add(this.btnTestConnection);
         this.Controls.Add(this.btnSignOut);
         this.Controls.Add(this.pnlSetup);
         this.Controls.Add(this.pnlLote);
-        this.Controls.Add(this.txtLog);
+        this.Controls.Add(this.pnlLog);
 
         ((System.ComponentModel.ISupportInitialize)(this.numQuantidade)).EndInit();
+        ((System.ComponentModel.ISupportInitialize)(this.dgvItens)).EndInit();
         this.pnlSetup.ResumeLayout(false);
         this.pnlSetup.PerformLayout();
         this.pnlLote.ResumeLayout(false);
         this.pnlLote.PerformLayout();
+        this.pnlLogBox.ResumeLayout(false);
+        this.pnlLogBox.PerformLayout();
+        this.pnlLog.ResumeLayout(false);
+        this.pnlLog.PerformLayout();
         this.ResumeLayout(false);
         this.PerformLayout();
     }

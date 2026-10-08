@@ -15,8 +15,37 @@ static class Program
             return;
         }
 
+        // --lang en: interface em inglês. --demo: dados fictícios, sem API (prints de portfólio).
+        // --screenshot <arquivo.png>: salva um print da janela e fecha.
+        if (args.Contains("--lang") && Array.IndexOf(args, "--lang") + 1 < args.Length)
+        {
+            Texts.English = args[Array.IndexOf(args, "--lang") + 1] == "en";
+        }
+        var demo = args.Contains("--demo");
+        var screenshotIndex = Array.IndexOf(args, "--screenshot");
+        var screenshotPath = screenshotIndex >= 0 && screenshotIndex + 1 < args.Length ? args[screenshotIndex + 1] : null;
+
         ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+        var form = new MainForm(demo);
+        if (screenshotPath is not null)
+        {
+            form.Shown += async (_, _) =>
+            {
+                await Task.Delay(500);
+                form.TopMost = true;
+                form.Refresh();
+                await Task.Delay(300);
+                var origem = form.PointToScreen(Point.Empty);
+                using var bitmap = new Bitmap(form.ClientSize.Width, form.ClientSize.Height);
+                using (var graphics = Graphics.FromImage(bitmap))
+                {
+                    graphics.CopyFromScreen(origem, Point.Empty, form.ClientSize);
+                }
+                bitmap.Save(screenshotPath, System.Drawing.Imaging.ImageFormat.Png);
+                form.Close();
+            };
+        }
+        Application.Run(form);
     }
 
     // Modo de linha de comando pra consultar endpoints da API reaproveitando o token já salvo,
